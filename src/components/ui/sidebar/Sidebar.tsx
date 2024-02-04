@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-
-// import { useUIStore } from "@/store";
+import clsx from "clsx";
+import { useUIStore } from "@/store";
 import {
   Box,
   Divider,
   Drawer,
+  Fade,
   Grid,
   IconButton,
   List,
@@ -31,8 +32,8 @@ import PlaylistAddCheckOutlinedIcon from "@mui/icons-material/PlaylistAddCheckOu
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
 
 export const Sidebar = () => {
-  // const isSideMenuOpen = useUIStore( state => state.isSideMenuOpen );
-  // const closeMenu = useUIStore( state => state.closeSideMenu );
+  const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
+  const closeMenu = useUIStore((state) => state.closeSideMenu);
 
   // Función retorna jsx icono de módulo
 
@@ -42,8 +43,6 @@ export const Sidebar = () => {
     path: string;
     description_module: string;
   }
-
-  const [open, setOpen] = useState(true);
 
   const renderIconModule = (module: string) => {
     switch (module) {
@@ -99,119 +98,136 @@ export const Sidebar = () => {
   ];
 
   return (
-    <Box
-      component={"nav"}
-      //sx={{ width: { sm: "200px" }, flexShrink: { sm: 0 } }}
-    >
-      <Drawer
-        variant="permanent" //temporary hay que ocultar
-        open={open}
-        onClose={() => setOpen(false)}
-        sx={{
-          display: { xs: "block" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box" },
-          scrollbarColor: "#6b6b6b #2b2b2b",
-          "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
-            backgroundColor: "#fff",
-            width: "0.2em",
-          },
-          "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
-            //  borderRadius: 8,
-            backgroundColor: "#ccc",
-            minHeight: 24,
-            //border: "3px solid #2b2b2b",
-          },
-          "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus":
-            {
-              backgroundColor: "#959595",
-            },
-          "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active":
-            {
-              backgroundColor: "#959595",
-            },
-          "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover":
-            {
-              backgroundColor: "#959595",
-            },
-          "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
-            backgroundColor: "#2b2b2b",
-          },
-        }}
-      >
-        <Toolbar
+    <div>
+      {/* Blur */}
+      {isSideMenuOpen && (
+        <Fade in={isSideMenuOpen}>
+          <Box
+            onClick={closeMenu}
+            position="fixed"
+            top={0}
+            left={0}
+            width="100vw"
+            height="100vh"
+            zIndex={10}
+            //   backdropFilter="blur(4px)"
+            //    WebkitBackdropFilter="blur(4px)"
+            sx={{
+              backdropFilter: "blur(3px)",
+              backgroundColor: "rgba(0,0,30,0.4)",
+            }}
+          />
+        </Fade>
+      )}
+      <Box component={"nav"}>
+        <Drawer
+          variant="temporary"
+          open={isSideMenuOpen}
+          onClose={() => closeMenu()}
           sx={{
-            display: "flex",
-            alignItems: "center",
-            padding: theme.spacing(0, 1),
-            // necessary for content to be below app bar
-            ...theme.mixins.toolbar,
-            justifyContent: "flex-end",
-            // backgroundColor: Theme.palette.primary.main,
+            display: { xs: "block" },
+            "& .MuiDrawer-paper": { boxSizing: "border-box" },
+            scrollbarColor: "#6b6b6b #2b2b2b",
+            "&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+              backgroundColor: "#fff",
+              width: "0.2em",
+            },
+            "&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+              //  borderRadius: 8,
+              backgroundColor: "#ccc",
+              minHeight: 24,
+              //border: "3px solid #2b2b2b",
+            },
+            "&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus":
+              {
+                backgroundColor: "#959595",
+              },
+            "&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active":
+              {
+                backgroundColor: "#959595",
+              },
+            "&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover":
+              {
+                backgroundColor: "#959595",
+              },
+            "&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+              backgroundColor: "#2b2b2b",
+            },
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            // onClick={()=>setDrawer(!drawer)}
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: theme.spacing(0, 1),
+              // necessary for content to be below app bar
+              ...theme.mixins.toolbar,
+              justifyContent: "flex-end",
+              // backgroundColor: Theme.palette.primary.main,
+            }}
           >
-            <MenuOpenOutlinedIcon
-            // onClick={toggleDrawer}
-            />
-          </IconButton>
-        </Toolbar>
-        <Divider />
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={closeMenu}
+            >
+              <MenuOpenOutlinedIcon />
+            </IconButton>
+          </Toolbar>
+          <Divider />
 
-        <List>
-          {modules.map((module) => (
-            <ListItem key={module?.id} disablePadding>
-              <Link href={module?.path} passHref legacyBehavior>
+          <List>
+            {modules.map((module) => (
+              <ListItem key={module?.id} disablePadding>
+                <Link href={module?.path} passHref legacyBehavior>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      {renderIconModule(module?.name_module)}
+                    </ListItemIcon>
+                    <Grid container>
+                      <ListItemText primary={module?.name_module} />
+                    </Grid>
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            ))}
+            <Divider />
+            <ListItem disablePadding>
+              <Link href={"/home"} passHref legacyBehavior>
                 <ListItemButton>
                   <ListItemIcon>
-                    {renderIconModule(module?.name_module)}
+                    <SettingsOutlinedIcon />
                   </ListItemIcon>
                   <Grid container>
-                    <ListItemText primary={module?.name_module} />
+                    <ListItemText primary={"Ajustes"} />
+                    {/* <ListItemText
+                    secondary="jol"
+                   {newTitle(module?.description_module)}
+                  /> */}
                   </Grid>
                 </ListItemButton>
               </Link>
             </ListItem>
-          ))}
-          <Divider />
-          <ListItem disablePadding>
-            <Link href={"/home"} passHref legacyBehavior>
-              <ListItemButton>
-                <ListItemIcon>
-                  <SettingsOutlinedIcon />
-                </ListItemIcon>
-                <Grid container>
-                  <ListItemText primary={"Ajustes"} />
-                  {/* <ListItemText
+            <ListItem disablePadding>
+              <Link href={"/home"} passHref legacyBehavior>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <LiveHelpOutlinedIcon />
+                  </ListItemIcon>
+                  <Grid container>
+                    <ListItemText primary={"Ayuda"} />
+                    {/* <ListItemText
                     secondary="jol"
                    {newTitle(module?.description_module)}
                   /> */}
-                </Grid>
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem disablePadding>
-            <Link href={"/home"} passHref legacyBehavior>
-              <ListItemButton>
-                <ListItemIcon>
-                  <LiveHelpOutlinedIcon />
-                </ListItemIcon>
-                <Grid container>
-                  <ListItemText primary={"Ayuda"} />
-                  {/* <ListItemText
-                    secondary="jol"
-                   {newTitle(module?.description_module)}
-                  /> */}
-                </Grid>
-              </ListItemButton>
-            </Link>
-          </ListItem>
-        </List>
-      </Drawer>
-    </Box>
+                  </Grid>
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          </List>
+        </Drawer>
+      </Box>
+    </div>
   );
 };
