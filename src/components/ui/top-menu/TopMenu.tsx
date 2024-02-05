@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { Avatar, Typography } from "@mui/material";
 
 export const TopMenu = () => {
   const openSideMenu = useUIStore((state) => state.openSideMenu);
@@ -81,7 +82,9 @@ export const TopMenu = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem
+      // onClick={handleProfileMenuOpen}
+      >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -94,11 +97,7 @@ export const TopMenu = () => {
         <p>Mi Perfil</p>
       </MenuItem>
       <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
+        <IconButton size="large" aria-label="logout app" color="inherit">
           <PowerSettingsNewOutlinedIcon />
         </IconButton>
         <p>Salir</p>
@@ -123,6 +122,11 @@ export const TopMenu = () => {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <Typography variant="body2" color={"inherit"}>
+              Hola {"Juan Pérez"}
+            </Typography>
+          </Box>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               edge="end"
@@ -132,7 +136,7 @@ export const TopMenu = () => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar sx={{ width: 32, height: 32 }}>JP</Avatar>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>

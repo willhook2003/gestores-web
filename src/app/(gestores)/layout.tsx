@@ -1,4 +1,4 @@
-import { Sidebar, TopMenu } from "@/components";
+import { Footer, Sidebar, TopMenu } from "@/components";
 
 export default function GestoresLayout({
   children,
@@ -11,8 +11,10 @@ export default function GestoresLayout({
       <TopMenu />
       {/* SideBar */}
       <Sidebar />
-
-      <div className="px-0 sm:px-10">{children}</div>
+      <div className="px-0 sm:px-10" style={{ marginTop: "4rem" }}>
+        {children}
+      </div>
+      <Footer />
     </main>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import clsx from "clsx";
 import { useUIStore } from "@/store";
@@ -16,9 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
 } from "@mui/material";
-import { useState } from "react";
 import theme from "@/theme";
 
 // Icons
@@ -86,7 +83,7 @@ export const Sidebar = () => {
     {
       id: 4,
       name_module: "Gestores",
-      path: "/gestores",
+      path: "/gestoresPage",
       description_module: "Pantalla de Gestores",
     },
     {
@@ -96,6 +93,12 @@ export const Sidebar = () => {
       description_module: "Pantalla de asignaciones",
     },
   ];
+
+  // useEffect(() => {
+  //   router.events.on("routeChangeStart", closeMenu);
+
+  //   return () => router.events.off("routeChangeStart", closeMenu);
+  // }, [router.events]);
 
   return (
     <div>
@@ -181,7 +184,7 @@ export const Sidebar = () => {
             {modules.map((module) => (
               <ListItem key={module?.id} disablePadding>
                 <Link href={module?.path} passHref legacyBehavior>
-                  <ListItemButton>
+                  <ListItemButton onClick={closeMenu}>
                     <ListItemIcon>
                       {renderIconModule(module?.name_module)}
                     </ListItemIcon>
@@ -194,8 +197,13 @@ export const Sidebar = () => {
             ))}
             <Divider />
             <ListItem disablePadding>
-              <Link href={"/home"} passHref legacyBehavior>
-                <ListItemButton>
+              <Link
+                href={"/ajustes"}
+                passHref
+                legacyBehavior
+                onClick={closeMenu}
+              >
+                <ListItemButton onClick={closeMenu}>
                   <ListItemIcon>
                     <SettingsOutlinedIcon />
                   </ListItemIcon>
@@ -210,8 +218,8 @@ export const Sidebar = () => {
               </Link>
             </ListItem>
             <ListItem disablePadding>
-              <Link href={"/home"} passHref legacyBehavior>
-                <ListItemButton>
+              <Link href={"/ayuda"} passHref legacyBehavior onClick={closeMenu}>
+                <ListItemButton onClick={closeMenu}>
                   <ListItemIcon>
                     <LiveHelpOutlinedIcon />
                   </ListItemIcon>
