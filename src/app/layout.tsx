@@ -13,8 +13,8 @@ export default async function GestoresLayout({
   // }
 
   return (
-    <main className="flex justify-center">
-      <div className="w-full sm:w-[350px] px-10">{children}</div>
-    </main>
+    <html lang="en">
+      <body>{children}</body>
+    </html>
   );
 }

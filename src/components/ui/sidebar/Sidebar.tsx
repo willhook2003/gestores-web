@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import clsx from "clsx";
+import { usePathname } from "next/navigation";
 import { useUIStore } from "@/store";
 import {
   Box,
@@ -27,8 +27,11 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import PlaylistAddCheckOutlinedIcon from "@mui/icons-material/PlaylistAddCheckOutlined";
 import MenuOpenOutlinedIcon from "@mui/icons-material/MenuOpenOutlined";
+import { useEffect } from "react";
 
 export const Sidebar = () => {
+  const pathname = usePathname();
+
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
   const closeMenu = useUIStore((state) => state.closeSideMenu);
 
@@ -94,11 +97,9 @@ export const Sidebar = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   router.events.on("routeChangeStart", closeMenu);
-
-  //   return () => router.events.off("routeChangeStart", closeMenu);
-  // }, [router.events]);
+  useEffect(() => {
+    closeMenu();
+  }, [pathname]);
 
   return (
     <div>
@@ -184,7 +185,7 @@ export const Sidebar = () => {
             {modules.map((module) => (
               <ListItem key={module?.id} disablePadding>
                 <Link href={module?.path} passHref legacyBehavior>
-                  <ListItemButton onClick={closeMenu}>
+                  <ListItemButton>
                     <ListItemIcon>
                       {renderIconModule(module?.name_module)}
                     </ListItemIcon>
@@ -197,13 +198,8 @@ export const Sidebar = () => {
             ))}
             <Divider />
             <ListItem disablePadding>
-              <Link
-                href={"/ajustes"}
-                passHref
-                legacyBehavior
-                onClick={closeMenu}
-              >
-                <ListItemButton onClick={closeMenu}>
+              <Link href={"/ajustes"} passHref legacyBehavior>
+                <ListItemButton>
                   <ListItemIcon>
                     <SettingsOutlinedIcon />
                   </ListItemIcon>
@@ -218,8 +214,8 @@ export const Sidebar = () => {
               </Link>
             </ListItem>
             <ListItem disablePadding>
-              <Link href={"/ayuda"} passHref legacyBehavior onClick={closeMenu}>
-                <ListItemButton onClick={closeMenu}>
+              <Link href={"/ayuda"} passHref legacyBehavior>
+                <ListItemButton>
                   <ListItemIcon>
                     <LiveHelpOutlinedIcon />
                   </ListItemIcon>
