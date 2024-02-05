@@ -1,22 +1,20 @@
-import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+// import { auth } from '@/auth.config';
+import { redirect } from "next/navigation";
 
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "../theme";
+export default async function GestoresLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // const session = await auth();
 
-export const metadata: Metadata = {
-  title: "Gestores",
-  description: "App Next14",
-};
+  // if ( session?.user ) {
+  //   redirect('/');
+  // }
 
-export default function RootLayout(props) {
   return (
-    <html lang="en">
-      <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-        </AppRouterCacheProvider>
-      </body>
-    </html>
+    <main className="flex justify-center">
+      <div className="w-full sm:w-[350px] px-10">{children}</div>
+    </main>
   );
 }
